@@ -1,0 +1,3 @@
+*.pptx
+/Xilinx
+/rtl/fft_tsmc_16b
