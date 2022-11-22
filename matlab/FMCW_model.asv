@@ -1,0 +1,99 @@
+%% FMCW雷达发射信号、回波信号、混频、距离维FFT、速度维FFT建模仿真。
+%%=========================================================================
+clear all;
+close all;
+clc;
+coe =[0,931,0,2940,0,7357,0,32767,32767,0,7357,0,2940,0,931,0]; %滤波器系数
+%% 雷达系统参数设置
+maxR = 200;           % 雷达最大探测目标的距离
+rangeRes = 1;         % 雷达的距离分率
+fc= 77e9;             % 雷达工作频率 载频
+c = 3e8;              % 光速
+lamda = c/fc;         % 载波波长
+
+%% 目标参数
+r0 = 20; % 目标距离设置
+v0 = 8; % 目标速度设置
+
+%% FMCW波形参数设置
+B = c / (2*rangeRes);           % 发射信号带宽B = 150MHz
+Tchirp = 20 * 2 * maxR/c;       % 扫频时间
+slope = B / Tchirp;             %调频斜率
+f_IFmax= (slope*2*maxR)/c ;     %最高中频频率
+f_IF=(slope*2*r0)/c ;           %当前中频频率
+
+Nd=64;                           %chirp数量 
+Nr=256;                        %ADC采样点数
+vres = lamda /(2*Nd*Tchirp);    %速度分辨率
+maxV = lamda /(4*Tchirp);       % 雷达最大检测目标的速度
+Fs=Nr/Tchirp;                   %模拟信号采样频率
+
+t=linspace(0,Nd*Tchirp,Nr*Nd); %发射信号和接收信号的采样时间 1024*128
+
+Tx=zeros(1,length(t)); %发射信号
+Rx=zeros(1,length(t)); %接收信号
+% Mix = zeros(1,length(t)); %差频、差拍、拍频、中频信号
+fq=linspace(0,Fs/2,Nr/2);
+
+r_t=zeros(1,length(t));
+td=zeros(1,length(t));
+
+%% 信号生成
+for i=1:length(t)
+    
+    r_t(i) = r0 + v0*t(i); % 距离更新
+    td(i) = 2*r_t(i)/c;    % 延迟时间
+    n = floor(i/Nr);
+    delta_t(i)=t(i)-td(i);
+
+    Tx(i) = cos(2*pi*(fc*t(i) + (slope*(t(i)- n*Tchirp)^2)/2)); % 发射信号 实数信号
+    Rx(i) = cos(2*pi*(fc*(t(i)-td(i)) + (slope*(delta_t(i)- n*Tchirp)^2)/2)); %接收信号 实数信号
+    
+    if i<=Nr*4
+        freq(i) = fc + slope*(t(i)- n*Tchirp);
+        freq_echo(i) = fc + slope*(delta_t(i)- n*Tchirp); 
+        tb_mix(i) = abs(freq_echo(i) - freq(i));
+    end
+    Mix(i) = Tx(i).*conj(Rx(i));%差频、差拍、拍频、中频信号
+end
+
+%% 加矩形窗
+Mix = conv(Mix,coe)/(2^16); % 输出信号
+Mix = Mix(1:Nr*Nd);
+signal = reshape(Mix,Nr,Nd);
+
+%% 接收信号与发射信号的时频图
+figure(2);
+plot(freq);
+hold on;
+plot(freq_echo);
+xlabel('时间');
+ylabel('频率');
+title('接收信号与发射信号时频图');
+legend ('TX','RX');
+
+%% 距离维FFT
+for i=1:Nd
+    sig_fft1(:,i)=fft(signal(:,i));
+end
+
+sig_fft = abs(sig_fft1);
+figure;
+plot(sig_fft(1:Nr/2,1));
+xlabel('距离[m]');
+ylabel('幅度')
+title('第一个chirp的FFT结果')
+
+%% 速度维FFT
+for i=1:Nr
+    sig_fft2(i,:)=fft(sig_fft1(i,:));
+end
+doppler_axis = vres*((1:Nd/2)-1);
+range_axis = rangeRes*((1:Nr/2)-1);
+
+figure(3);
+mesh(doppler_axis,range_axis,db(abs(sig_fft2(1:Nr/2,1:Nd/2))));
+xlabel('速度[m/s]');
+ylabel('距离[m]');
+zlabel('幅度');
+title('二维FFT结果');
