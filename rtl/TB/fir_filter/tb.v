@@ -12,11 +12,13 @@ wire [27:0]  yout ;
 
 parameter    SIN_DATA_NUM = 16384 ;      //仿真周期
 
-reg [11:0] simulate [0:SIN_DATA_NUM-1];
+reg [15:0] simulate [0:SIN_DATA_NUM-1];
 reg [27:0] golden [0:SIN_DATA_NUM-1];
+
+integer fp;
 //=====================================
 // 50MHz clk generating
-localparam   TCLK_HALF     = 10_000;
+localparam   TCLK_HALF     = 20;
 initial begin
     clk = 1'b0 ;
     forever begin
@@ -30,12 +32,10 @@ end
 initial begin
     rst_n = 1'b0 ;
     # 30   rst_n = 1'b1 ;
-    # 10000000;
-    $finish ;
 end
 
 initial begin
-    $readmemh("../../../TB/fir_filter/simulate.txt",simulate) ;
+    $readmemb("../../../TB/fir_filter/mix_data.txt",simulate) ;
 end
 
 initial begin
@@ -48,14 +48,16 @@ initial begin
     i = 0 ;
     en = 0 ;
     xin = 0 ;
+    fp = $fopen("../../../TB/fir_filter/fir_result.txt");
     # 200 ;
     forever begin
         @(negedge clk) begin
             en = 1'b1 ;
-            // xin = {{4{simulate[i][11]}},simulate[i]};
             xin = simulate[i];
             if (i == SIN_DATA_NUM-1) begin  //data in periodly
-                i = 0 ;
+                en = 1'b0 ;
+                $fclose(fp);
+                $finish ;
             end
             else begin
                 i = i + 1 ;
@@ -66,13 +68,14 @@ end
 
 always @(*) begin
     if(valid) begin
-        $display("fir_data = %d",yout);
+        $fdisplay(fp,"%d",$signed(yout));
+        $display("fir_data = %d",$signed(yout));
     end
 end
 
 initial	begin
 	    $fsdbDumpfile("tb.fsdb");	    
-        $fsdbDumpvars(0);
+        $fsdbDumpvars(0,"tb","+all");
 end
 
 fir_filter #(

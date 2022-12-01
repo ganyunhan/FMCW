@@ -22,23 +22,23 @@ reg         [ 4- 1    : 0] valid_mult_r;
 
 wire signed [12- 1: 0]     coe            [ 8- 1: 0];
 
-assign coe[0]  = 12'd11 ;
-assign coe[1]  = 12'd31 ;
-assign coe[2]  = 12'd63 ;
-assign coe[3]  = 12'd104;
-assign coe[4]  = 12'd152;
-assign coe[5]  = 12'd198;
-assign coe[6]  = 12'd235;
-assign coe[7]  = 12'd255;
+// assign coe[0]  = 12'd11 ;
+// assign coe[1]  = 12'd31 ;
+// assign coe[2]  = 12'd63 ;
+// assign coe[3]  = 12'd104;
+// assign coe[4]  = 12'd152;
+// assign coe[5]  = 12'd198;
+// assign coe[6]  = 12'd235;
+// assign coe[7]  = 12'd255;
 
-// assign coe[0]  = -12'd160 ;
-// assign coe[1]  = -12'd92  ;
-// assign coe[2]  = -12'd265 ;
-// assign coe[3]  =  12'd22  ;
-// assign coe[4]  = -12'd447 ;
-// assign coe[5]  =  12'd288 ;
-// assign coe[6]  = -12'd988 ;
-// assign coe[7]  =  12'd2391;
+assign coe[0]  =  12'd40  ;
+assign coe[1]  = -12'd41  ;
+assign coe[2]  =  12'd31  ;
+assign coe[3]  = -12'd14  ;
+assign coe[4]  = -12'd18  ;
+assign coe[5]  =  12'd69  ;
+assign coe[6]  = -12'd174 ;
+assign coe[7]  =  12'd614 ;
 
 //data ready delay
 always @(posedge clk or negedge rst_n) begin
