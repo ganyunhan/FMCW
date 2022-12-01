@@ -169,8 +169,6 @@ Stage_A1_MUX_Im(
 .data_o  ( mux_do_a1_im            )
 );
 
-
-
 SdfUnit #(.M(1024),.WIDTH(WIDTH) )    //  M: Twiddle Resolution
 Inst_SdfUnit_A1(
     .clock        ( clock                                 ),  //  Master Clock
@@ -288,130 +286,130 @@ Inst_SdfUnit_A5(
 //  Datapath of 32 point FFT,128 point FFT,and 512 point FFT
 //----------------------------------------------------------------------
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B1_MUX_Re(
-.data_sel( sel_do_512&data1_do_en ),
-.data_a  ( data1_do_re            ),
-.data_b  ( {WIDTH{1'b0}}          ),
-.data_o  ( mux_do_b1_re           )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B1_MUX_Re(
+// .data_sel( sel_do_512&data1_do_en ),
+// .data_a  ( data1_do_re            ),
+// .data_b  ( {WIDTH{1'b0}}          ),
+// .data_o  ( mux_do_b1_re           )
+// );
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B1_MUX_Im(
-.data_sel( sel_do_512&data1_do_en ),
-.data_a  ( data1_do_im            ),
-.data_b  ( {WIDTH{1'b0}}          ),
-.data_o  ( mux_do_b1_im           )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B1_MUX_Im(
+// .data_sel( sel_do_512&data1_do_en ),
+// .data_a  ( data1_do_im            ),
+// .data_b  ( {WIDTH{1'b0}}          ),
+// .data_o  ( mux_do_b1_im           )
+// );
 
 
-SdfUnit #(.M(512),.WIDTH(WIDTH) )     //  M: Twiddle Resolution
-Inst_SdfUnit_B1(
-    .clock        ( clock                               ),  //  Master Clock
-    .reset        ( reset                               ),  //  Active High Asynchronous Reset
-    .di_cnt_max   ( cnt_do_max                          ),
-    .di_twaddr_sft( tw_addr_shift_do                    ),  //  Shift bit to fit Twiddle1024_16B
-    .di_mode_sel  ( mode_do_sel                         ),
-    .di_logn_logm ( do_logn_minus_logm1                 ),  //  Log2(N)-Log2(M)
-    .di_en        ( sel_do_512&data1_do_en              ),  //  Input Data Enable
-    .di_re        ( mux_do_b1_re                        ),  //  Input Data (Real)
-    .di_im        ( mux_do_b1_im                        ),  //  Input Data (Imag)
-    .do_en        ( su_b1_do_en                         ),  //  Output Data Enable
-    .do_re        ( su_b1_do_re                         ),  //  Output Data (Real)
-    .do_im        ( su_b1_do_im                         )   //  Output Data (Imag)
-);
+// SdfUnit #(.M(512),.WIDTH(WIDTH) )     //  M: Twiddle Resolution
+// Inst_SdfUnit_B1(
+//     .clock        ( clock                               ),  //  Master Clock
+//     .reset        ( reset                               ),  //  Active High Asynchronous Reset
+//     .di_cnt_max   ( cnt_do_max                          ),
+//     .di_twaddr_sft( tw_addr_shift_do                    ),  //  Shift bit to fit Twiddle1024_16B
+//     .di_mode_sel  ( mode_do_sel                         ),
+//     .di_logn_logm ( do_logn_minus_logm1                 ),  //  Log2(N)-Log2(M)
+//     .di_en        ( sel_do_512&data1_do_en              ),  //  Input Data Enable
+//     .di_re        ( mux_do_b1_re                        ),  //  Input Data (Real)
+//     .di_im        ( mux_do_b1_im                        ),  //  Input Data (Imag)
+//     .do_en        ( su_b1_do_en                         ),  //  Output Data Enable
+//     .do_re        ( su_b1_do_re                         ),  //  Output Data (Real)
+//     .do_im        ( su_b1_do_im                         )   //  Output Data (Imag)
+// );
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B2_MUX_Re(
-.data_sel( sel_do_128&data2_do_en ),
-.data_a  ( data2_do_re            ),
-.data_b  ( su_b1_do_re            ),
-.data_o  ( mux_do_b2_re           )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B2_MUX_Re(
+// .data_sel( sel_do_128&data2_do_en ),
+// .data_a  ( data2_do_re            ),
+// .data_b  ( su_b1_do_re            ),
+// .data_o  ( mux_do_b2_re           )
+// );
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B2_MUX_Im(
-.data_sel( sel_do_128&data2_do_en ),
-.data_a  ( data2_do_im            ),
-.data_b  ( su_b1_do_im            ),
-.data_o  ( mux_do_b2_im           )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B2_MUX_Im(
+// .data_sel( sel_do_128&data2_do_en ),
+// .data_a  ( data2_do_im            ),
+// .data_b  ( su_b1_do_im            ),
+// .data_o  ( mux_do_b2_im           )
+// );
 
-SdfUnit #(.M(128),.WIDTH(WIDTH) )     //  M: Twiddle Resolution
-Inst_SdfUnit_B2(
-    .clock        ( clock                                ),  //  Master Clock
-    .reset        ( reset                                ),  //  Active High Asynchronous Reset
-    .di_cnt_max   ( cnt_do_max                           ),
-    .di_twaddr_sft( tw_addr_shift_do                     ),  //  Shift bit to fit Twiddle1024_16B
-    .di_mode_sel  ( mode_do_sel                          ),
-    .di_logn_logm ( do_logn_minus_logm2                  ),  //  Log2(N)-Log2(M)
-    .di_en        ( (sel_do_128&data2_do_en)|su_b1_do_en ),  //  Input Data Enable
-    .di_re        ( mux_do_b2_re                         ),  //  Input Data (Real)
-    .di_im        ( mux_do_b2_im                         ),  //  Input Data (Imag)
-    .do_en        ( su_b2_do_en                          ),  //  Output Data Enable
-    .do_re        ( su_b2_do_re                          ),  //  Output Data (Real)
-    .do_im        ( su_b2_do_im                          )   //  Output Data (Imag)
-);
+// SdfUnit #(.M(128),.WIDTH(WIDTH) )     //  M: Twiddle Resolution
+// Inst_SdfUnit_B2(
+//     .clock        ( clock                                ),  //  Master Clock
+//     .reset        ( reset                                ),  //  Active High Asynchronous Reset
+//     .di_cnt_max   ( cnt_do_max                           ),
+//     .di_twaddr_sft( tw_addr_shift_do                     ),  //  Shift bit to fit Twiddle1024_16B
+//     .di_mode_sel  ( mode_do_sel                          ),
+//     .di_logn_logm ( do_logn_minus_logm2                  ),  //  Log2(N)-Log2(M)
+//     .di_en        ( (sel_do_128&data2_do_en)|su_b1_do_en ),  //  Input Data Enable
+//     .di_re        ( mux_do_b2_re                         ),  //  Input Data (Real)
+//     .di_im        ( mux_do_b2_im                         ),  //  Input Data (Imag)
+//     .do_en        ( su_b2_do_en                          ),  //  Output Data Enable
+//     .do_re        ( su_b2_do_re                          ),  //  Output Data (Real)
+//     .do_im        ( su_b2_do_im                          )   //  Output Data (Imag)
+// );
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B3_MUX_Re(
-.data_sel( sel_do_32&data3_do_en ),
-.data_a  ( data3_do_re           ),
-.data_b  ( su_b2_do_re           ),
-.data_o  ( mux_do_b3_re          )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B3_MUX_Re(
+// .data_sel( sel_do_32&data3_do_en ),
+// .data_a  ( data3_do_re           ),
+// .data_b  ( su_b2_do_re           ),
+// .data_o  ( mux_do_b3_re          )
+// );
 
-Mux2To1 #(.WIDTH(WIDTH))
-Stage_B3_MUX_Im(
-.data_sel( sel_do_32&data3_do_en ),
-.data_a  ( data3_do_im           ),
-.data_b  ( su_b2_do_im           ),
-.data_o  ( mux_do_b3_im          )
-);
+// Mux2To1 #(.WIDTH(WIDTH))
+// Stage_B3_MUX_Im(
+// .data_sel( sel_do_32&data3_do_en ),
+// .data_a  ( data3_do_im           ),
+// .data_b  ( su_b2_do_im           ),
+// .data_o  ( mux_do_b3_im          )
+// );
 
-SdfUnit #(.M(32),.WIDTH(WIDTH) )      //  M: Twiddle Resolution
-Inst_SdfUnit_B3(
-    .clock        ( clock                               ),  //  Master Clock
-    .reset        ( reset                               ),  //  Active High Asynchronous Reset
-    .di_cnt_max   ( cnt_do_max                          ),
-    .di_twaddr_sft( tw_addr_shift_do                    ),  //  Shift bit to fit Twiddle1024_16B
-    .di_mode_sel  ( mode_do_sel                         ),
-    .di_logn_logm ( do_logn_minus_logm3                 ),  //  Log2(N)-Log2(M)
-    .di_en        ( (sel_do_32&data3_do_en)|su_b2_do_en ),  //  Input Data Enable
-    .di_re        ( mux_do_b3_re                        ),  //  Input Data (Real)
-    .di_im        ( mux_do_b3_im                        ),  //  Input Data (Imag)
-    .do_en        ( su_b3_do_en                         ),  //  Output Data Enable
-    .do_re        ( su_b3_do_re                         ),  //  Output Data (Real)
-    .do_im        ( su_b3_do_im                         )   //  Output Data (Imag)
-);
+// SdfUnit #(.M(32),.WIDTH(WIDTH) )      //  M: Twiddle Resolution
+// Inst_SdfUnit_B3(
+//     .clock        ( clock                               ),  //  Master Clock
+//     .reset        ( reset                               ),  //  Active High Asynchronous Reset
+//     .di_cnt_max   ( cnt_do_max                          ),
+//     .di_twaddr_sft( tw_addr_shift_do                    ),  //  Shift bit to fit Twiddle1024_16B
+//     .di_mode_sel  ( mode_do_sel                         ),
+//     .di_logn_logm ( do_logn_minus_logm3                 ),  //  Log2(N)-Log2(M)
+//     .di_en        ( (sel_do_32&data3_do_en)|su_b2_do_en ),  //  Input Data Enable
+//     .di_re        ( mux_do_b3_re                        ),  //  Input Data (Real)
+//     .di_im        ( mux_do_b3_im                        ),  //  Input Data (Imag)
+//     .do_en        ( su_b3_do_en                         ),  //  Output Data Enable
+//     .do_re        ( su_b3_do_re                         ),  //  Output Data (Real)
+//     .do_im        ( su_b3_do_im                         )   //  Output Data (Imag)
+// );
 
-SdfUnit #(.M(8),.WIDTH(WIDTH) )       //  M: Twiddle Resolution
-Inst_SdfUnit_B4(
-    .clock        ( clock               ),  //  Master Clock
-    .reset        ( reset               ),  //  Active High Asynchronous Reset
-    .di_cnt_max   ( cnt_do_max          ),
-    .di_twaddr_sft( tw_addr_shift_do    ),  //  Shift bit to fit Twiddle1024_16B
-    .di_mode_sel  ( mode_do_sel         ),
-    .di_logn_logm ( do_logn_minus_logm4 ),  //  Log2(N)-Log2(M)
-    .di_en        ( su_b3_do_en         ),  //  Input Data Enable
-    .di_re        ( su_b3_do_re         ),  //  Input Data (Real)
-    .di_im        ( su_b3_do_im         ),  //  Input Data (Imag)
-    .do_en        ( su_b4_do_en         ),  //  Output Data Enable
-    .do_re        ( su_b4_do_re         ),  //  Output Data (Real)
-    .do_im        ( su_b4_do_im         )   //  Output Data (Imag)
-);
+// SdfUnit #(.M(8),.WIDTH(WIDTH) )       //  M: Twiddle Resolution
+// Inst_SdfUnit_B4(
+//     .clock        ( clock               ),  //  Master Clock
+//     .reset        ( reset               ),  //  Active High Asynchronous Reset
+//     .di_cnt_max   ( cnt_do_max          ),
+//     .di_twaddr_sft( tw_addr_shift_do    ),  //  Shift bit to fit Twiddle1024_16B
+//     .di_mode_sel  ( mode_do_sel         ),
+//     .di_logn_logm ( do_logn_minus_logm4 ),  //  Log2(N)-Log2(M)
+//     .di_en        ( su_b3_do_en         ),  //  Input Data Enable
+//     .di_re        ( su_b3_do_re         ),  //  Input Data (Real)
+//     .di_im        ( su_b3_do_im         ),  //  Input Data (Imag)
+//     .do_en        ( su_b4_do_en         ),  //  Output Data Enable
+//     .do_re        ( su_b4_do_re         ),  //  Output Data (Real)
+//     .do_im        ( su_b4_do_im         )   //  Output Data (Imag)
+// );
 
- SdfUnit2 #(.WIDTH(WIDTH))
- Inst_SdfUnit_B5 (
-    .clock( clock       ),  //  Master Clock
-    .reset( reset       ),  //  Active High Asynchronous Reset
-    .di_en( su_b4_do_en ),  //  Input Data Enable
-    .di_re( su_b4_do_re ),  //  Input Data (Real)
-    .di_im( su_b4_do_im ),  //  Input Data (Imag)
-    .do_en( su_b5_do_en ),  //  Output Data Enable
-    .do_re( su_b5_do_re ),  //  Output Data (Real)
-    .do_im( su_b5_do_im )   //  Output Data (Imag)
-);
+//  SdfUnit2 #(.WIDTH(WIDTH))
+//  Inst_SdfUnit_B5 (
+//     .clock( clock       ),  //  Master Clock
+//     .reset( reset       ),  //  Active High Asynchronous Reset
+//     .di_en( su_b4_do_en ),  //  Input Data Enable
+//     .di_re( su_b4_do_re ),  //  Input Data (Real)
+//     .di_im( su_b4_do_im ),  //  Input Data (Imag)
+//     .do_en( su_b5_do_en ),  //  Output Data Enable
+//     .do_re( su_b5_do_re ),  //  Output Data (Real)
+//     .do_im( su_b5_do_im )   //  Output Data (Imag)
+// );
 
 
 Mux2To1 #(.WIDTH(WIDTH))
@@ -429,7 +427,6 @@ Stage_OUT_MUX_Im(
 .data_b  ( su_b5_do_im                ),
 .data_o  ( mux_do_im                  )
 );
-
 
 //----------------------------------------------------------------------
 // Delay 1 Cycle 

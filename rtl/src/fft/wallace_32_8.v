@@ -1,4 +1,4 @@
-`include "../rtl/wallace_1_8.v"
+// `include "../rtl/wallace_1_8.v"
 module wallace_32_8(
     // input wire [31:0]  xin[7:0] ,//booth编码后得到的8个部分积
     input wire [31:0]  xin0     ,

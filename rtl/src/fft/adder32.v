@@ -1,4 +1,4 @@
-`include "../rtl/adder4.v"
+// `include "../rtl/adder4.v"
 module adder32(
     input  wire [31:0]  a   ,//输入数据，二进制补码
     input  wire [31:0]  b   ,//输入数据，二进制补码

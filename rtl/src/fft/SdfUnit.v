@@ -277,18 +277,6 @@ end
 assign tw_addr_pre=tw_num * tw_sel;
 assign tw_addr = tw_addr_pre<<di_twaddr_sft;//To fit the Twiddle1024_16B
 
-
-/*
-assign  tw_sel[1] = bf2_count[LOG_M-2];        //M=128 tw_sel[1] = bf2_count[5];
-assign  tw_sel[0] = bf2_count[LOG_M-1];        //M=128 tw_sel[0] = bf2_count[6];
-assign  tw_num = bf2_count << (LOG_N-LOG_M);   //M=128 N=128 bf2_count<<(7-7) ------> tw_num[LOG_N-3:0] ;Twiddle Number (n)
-//assign  tw_addr = tw_num * tw_sel;             // 
-assign  tw_addr = tw_num[4:0] * tw_sel;     
-*/
-
-
-
-
 Twiddle TW (
     .clock  (clock  ),  //  i
     .addr   (tw_addr),  //  i

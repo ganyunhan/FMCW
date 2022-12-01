@@ -1,5 +1,5 @@
-`include "../rtl/full_adder.v"
-`include "../rtl/half_adder.v"
+// `include "../rtl/full_adder.v"
+// `include "../rtl/half_adder.v"
 module wallace_1_8(
     input   [7: 0]     N   ,// N个1bit数进行压缩(拥有相同的权重)
     input   [5: 0]     cin ,// 来自右侧的进位(index大的在高层)

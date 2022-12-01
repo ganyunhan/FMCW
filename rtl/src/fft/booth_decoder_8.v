@@ -1,4 +1,4 @@
-`include "../rtl/booth_decoder.v"
+// `include "../rtl/booth_decoder.v"
 module booth_decoder_8 (
     input  wire [15:0] xin       ,//乘数x
     input  wire [15:0] yin       ,//乘数y，依序取其3bit进行译码得到booth编码的选择信号

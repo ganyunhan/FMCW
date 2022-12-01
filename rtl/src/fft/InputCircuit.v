@@ -104,61 +104,67 @@ reg [WIDTH-1 : 0] reg_data3_im ; // Reg Data3 (Imag)
 
 always @(*) begin 
 	case(mode_di_sel)
-		mode32:begin
-			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd0,4'd2,4'd0};//2:log2(32)-log2(8)
-			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b0,1'b1} : {1'b0,1'b0,1'b0};
-			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_re} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_im} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			reg_cnt_max   = 10'd31;
-			tw_addr_shift = 3'd5;
-		end
+		// mode32:begin
+		// 	{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd0,4'd2,4'd0};//2:log2(32)-log2(8)
+		// 	{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b0,1'b1} : {1'b0,1'b0,1'b0};
+		// 	{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_re} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_im} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	reg_cnt_max   = 10'd31;
+		// 	tw_addr_shift = 3'd5;
+		// end
 		mode64:begin
 			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd0,4'd2,4'd4};
 			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b0,1'b1} : {1'b0,1'b0,1'b0};
 			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_re} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
 			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},{WIDTH{1'b0}},data_di_im} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
 			reg_cnt_max=10'd63;
-			tw_addr_shift= 3'd4;			
+			tw_addr_shift= 3'd2;			
 		end
-		mode128:begin
-			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd2,4'd4,4'd0};
-			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b1,1'b0} : {1'b0,1'b0,1'b0};
-			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},data_di_re,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},data_di_im,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			reg_cnt_max   = 10'd127;
-			tw_addr_shift = 3'd3;
-		end
+		// mode128:begin
+		// 	{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd2,4'd4,4'd0};
+		// 	{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b1,1'b0} : {1'b0,1'b0,1'b0};
+		// 	{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},data_di_re,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},data_di_im,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	reg_cnt_max   = 10'd127;
+		// 	tw_addr_shift = 3'd3;
+		// end
 		mode256:begin
 			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd2,4'd4,4'd6};
 			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b1,1'b0} : {1'b0,1'b0,1'b0};
 			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},data_di_re,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
 			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},data_di_im,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
 			reg_cnt_max   = 10'd255;
-			tw_addr_shift = 3'd2;
-		end
-		mode512:begin
-			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd0};
-			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
-			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			reg_cnt_max   = 10'd511;
-			tw_addr_shift = 3'd1;
-		end
-		mode1024:begin
-			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd8};
-			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
-			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			reg_cnt_max   = 10'd1023;
 			tw_addr_shift = 3'd0;
 		end
+		// mode512:begin
+		// 	{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd0};
+		// 	{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
+		// 	{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	reg_cnt_max   = 10'd511;
+		// 	tw_addr_shift = 3'd1;
+		// end
+		// mode1024:begin
+		// 	{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd8};
+		// 	{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
+		// 	{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+		// 	reg_cnt_max   = 10'd1023;
+		// 	tw_addr_shift = 3'd0;
+		// end
 		default:begin
-			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd8};
-			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
-			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
-			reg_cnt_max   = 10'd1023;
-			tw_addr_shift = 3'd0;
+			// {reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd2,4'd4,4'd6,4'd8};
+			// {reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b1,1'b0,1'b0} : {1'b0,1'b0,1'b0};
+			// {reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {data_di_re,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+			// {reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {data_di_im,{WIDTH{1'b0}},{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+			// reg_cnt_max   = 10'd1023;
+			// tw_addr_shift = 3'd0;
+			{reg_logn_minus_logm1,reg_logn_minus_logm2,reg_logn_minus_logm3,reg_logn_minus_logm4,reg_logn_minus_logm5}={4'd0,4'd0,4'd2,4'd4,4'd6};
+			{reg_data1_en,reg_data2_en,reg_data3_en}=data_di_en ? {1'b0,1'b1,1'b0} : {1'b0,1'b0,1'b0};
+			{reg_data1_re,reg_data2_re,reg_data3_re}=data_di_en ? {{WIDTH{1'b0}},data_di_re,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+			{reg_data1_im,reg_data2_im,reg_data3_im}=data_di_en ? {{WIDTH{1'b0}},data_di_im,{WIDTH{1'b0}}} : {{WIDTH{1'b0}},{WIDTH{1'b0}},{WIDTH{1'b0}}};
+			reg_cnt_max   = 10'd255;
+			tw_addr_shift = 3'd2;
 		end
 	endcase
 end

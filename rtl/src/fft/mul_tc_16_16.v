@@ -1,6 +1,6 @@
-`include "../rtl/wallace_32_8.v"
-`include "../rtl/booth_decoder_8.v"
-`include "../rtl/adder32.v"
+// `include "../rtl/wallace_32_8.v"
+// `include "../rtl/booth_decoder_8.v"
+// `include "../rtl/adder32.v"
 
 module mul_tc_16_16 (
     input wire [15:0]  a         ,//输入数据，二进制补码
